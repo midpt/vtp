@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html >
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, , minimum-scale=1, maximum-scale=1">
+	
+
+        <title>TF Words</title>
+
+		<!-- Tab icon   -->
+<!-- Hide this line for IE (needed for Firefox and others) -->
+ <![if !IE]>		
+		<link rel="icon" type="image/png" href="images/bright16.png" sizes="16x16">
+		<link rel="icon" type="image/png" href="images/bright32.png" sizes="32x32">
+<![endif]>
+		<!-- for IE -->
+		<link rel="icon" type="image/x-icon" href="favicon.ico" >
+		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>		
+					
+
+	
+    <link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
+    <!-- <link rel="stylesheet" href="_assets/css/jqm-demos.css"> -->
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link href="css/main.css" rel="stylesheet" type="text/css" />
+	<!-- spectrum.css is for color picker  -->
+    <link href="css/spectrum.css" rel="stylesheet" type="text/css" />
+	
+	<link rel="stylesheet" href="css/font-awesome.min.css"> 
+
+
+	
+	<style>
+
+	
+	html{
+	 
+	 } 
+	
+	   body {
+	  /* width:100vw; */
+      /* height:100vh; */
+
+	   overflow-y: hidden;
+	   
+	   }
+	   
+
+	
+	    /* wordsbox width must be SMALLER to ensure vert scrollbar is hidden   */
+	    div.wordsbox{
+		 /*  display: inline-block; */
+		   width: 600px;
+		   height:650px;
+		   overflow-y:hidden;
+		   overflow-x:hidden;
+		   border:0px solid red;   /*  set to 1 to debug  */
+            padding: 10px;
+			position: fixed;
+			top: 3%; 
+			left: 6%; 
+		
+		}
+		/* Set initial font-size   */
+		div.words{
+			/*display: inline-block; */
+			width: 610px;
+			height: 640px;
+		/*	margin-left: -90px; */
+			padding-left:2px;
+			padding-top: 1px;
+			padding-right: 24px;
+			padding-bottom:6px;
+			border: 0px solid blue;  /* set to 1 to debug  */
+			overflow-y: auto;
+			overflow-x:hidden;
+		  /*  position: fixed; */
+		  /*  top: 10%; */
+		  /*  left: 10%; */
+		  /*  margin-top: -50px; */
+		  /*  margin-left: -100px;	*/			
+		/*    opacity: 1; */
+		/*	background-color:rgba(245,245,245,0.3);  */
+		/*	margin: 0 auto; */
+			 /*  align-content:center; */
+		
+			
+			text-align: center;		
+			font-family:Raleway; /* Brush Script MT ;papyrus;     */
+			color: #dcf442;   /* #dcf442;  there is var iniWordColor should match this  */
+			
+		/*	font-size: 200%; */
+		/*    font-size:0.6em; */  /*  look for   wdid.setScaledFont(iniWordSize,610/1536); that set ini fonsize     */
+			font-weight:900;
+
+		/*	text-shadow: 0px 0px 3px #000;	 */	
+		    /*            x   y  blur color
+           /*text-shadow: 0px 0px 3px #000, -1px -1px #000, 1px 1px #000;  */S
+			
+			0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px
+			
+		 /*	text-shadow: 1px 1px 3px rgba(78, 101, 108, 1);  */
+           /* text-shadow: 3px 3px 2px #000; */
+			
+		
+		}
+		
+	
+		
+		
+		#backgnd {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			z-index: 0;
+            background-size: 100% 100% !important;  
+            background-repeat: no-repeat; 		
+		
+            overflow:hidden;			
+			
+			transition: background 1s linear;
+
+		}
+		
+			@font-face {
+				font-family: myFirstFont;
+				src: url(fonts/Amaranth-Regular.otf);
+			}
+			@font-face {
+					   font-family: myFirstFont;
+					   src: url(fonts/Amaranth-Bold.otf);
+					   font-weight: bold;
+				}	
+				
+		/* ------------------- Setting Popup ----------------          */		
+
+		/*  sliders width in menu.css         */
+	    div#settings{
+		 /*  display: inline-block; */
+		    width: 300px;
+		    height:340px;
+		    overflow-y:hidden;
+		    overflow-x:hidden;
+		    border:1px solid black;   /*  set to 1 to debug  */
+			background-color: beige;
+			padding: 10px;
+			position: fixed;
+			top: 3%; 
+			left: 40%; 
+			z-index: 10;	
+		}	
+
+		/*
+		.custom-btn{
+		   width: 50px !important;
+		   height:20px !important;
+		}
+	  */
+	  
+	  
+	  
+	  
+	  
+		</style>
+	    <link rel="stylesheet" href="css/menu.css">		
+
+
+
+
+		<script src="js/jquery.js"></script>
+		<!-- <script src="_assets/js/index.js"></script> -->
+		<script src="js/jquery.mobile-1.4.5.min.js"></script>
+		<script src="js/jquery.ui.touch-punch.min.js"></script>
+		<!-- FileSave.js  simplified save file and download -->
+		<script src="js/FileSaver.js"></script>
+		
+		<!-- color picker js -->
+		<script src="js/spectrum.js"></script>
+	
+	    <!-- This is how you load external file LOCALLY using json file  -->
+	    <!-- This way of loading local file works in IE, Chrome and Firefox  -->
+		<script type="text/javascript" src="settings.json"></script>
+	    <!-- Load TPs WORDS  -->
+		<script type="text/javascript" src="vtp.json"></script>
+	    <!-- Load background images -->
+		<script type="text/javascript" src="images.json"></script>
+		
+		
+	<script type="text/javascript">
+		var mode="Random";	
+        var seqIncOrDec=""; // if next is selected, then seqIncOrDec="Inc"	; If back is selected then 	seqIncOrDec="Dec"
+		var selTag="All";
+		var curSelTagTotal=0;
+		var menuvisible="visible"; // or hide
+		var playStatus="playing"; //play or pause
+		//---Initial word font size
+		var iniWordSize=0.14; //--change the initial WORDS font size here. should be around 0.14
+		var iniWordColor="#dcf442";
+		var iniWordFontFamily="Raleway";
+		var iniWordHor="6%";
+		var savedFontSize=""; //used when user set Font size in Settings
+		var savedFontColor=""; //used when user set Font color in Settings
+		var savedFontFamily=""; //used when user set Font Family in Settings
+		var savedWordHor=""; //used when user set Font Family in Settings
+		
+		//--------tag array --------
+		//---For Home_Church, True_Love, True_Parents have underscore as these contain TWO words.. under_scores are used to represent spaces
+
+		//***To insert additional Tag, just edit the those li tags under <nav> tag  ***
+		// IGNORE below guideline to insert additional tag
+
+		
+		
+		var curTag="All"
+	//	var AllWds=[]
+    //    var	AbsoluteWds=[]; // Tag: Absolute
+		 // variables cannot have hypens , hence underscores are used
+		//---For Home_Church, True_Love, True_Parents have underscore as these contain TWO words.. under_scores are used to represent spaces
+		//  Somewhere in the code, underscores will be replaced by spaces
+	//	var AbelWds=[], AdamWds=[],AmericaWds=[], CheongpaWds=[],GodWds=[],HeavenWds=[],Home_ChurchWds=[],JesusWds=[];
+	//	var KoreaWds=[],LoveWds=[],MindWds=[],PeaceWds=[],PrisonWds=[],ReligionWds=[],SelfishWds=[],SpiritWds=[];
+	//	var True_LoveWds=[],True_ParentsWds=[];
+		
+		
+function pausePlay(){
+  if (playStatus==="playing"){
+     clearInterval(intvRes);
+	 playStatus="paused";
+	 modeShow();
+	 }else{
+	 playStatus="playing";
+	 modeShow();
+	   readyToGetNxtWd();
+	 }
+}		
+		
+		   	
+		var gtWd;
+		var wdid	;
+	$(document).ready(function() {
+	
+
+	
+			 var res="<a id='mmode' href='#'>"+mode+" "+playStatus+"</a>"
+		     $(".modeStatus").html(res) ;
+			 	 
+		
+		   //=====Setup initial Words Font family, size, colour and x position =====
+		   wdid=document.getElementById("words");
+		   var wdbxid=document.getElementById("wordsbox");
+		   	   
+		   wdid.setScaledFont = function (ftsize, wd) {
+		       //----get current body size---
+			   var s = document.body.offsetWidth,
+				   fs = s * ftsize;
+				   wdWdth=s * wd ; // initially s will be 1536
+				   wdBxWdth=wdWdth-10; // wordsbox width always smaller than words width so as to hide the scroll bar
+			   this.style.fontSize = fs + '%';
+			   this.style.color=iniWordColor;//#dcf442
+			   this.style.fontFamily=iniWordFontFamily; //  Raleway
+			   this.style.width = wdWdth + 'px';
+			   wdbxid.style.width=wdBxWdth+'px';
+			   wdbxid.style.left=iniWordHor;
+			   
+			   $("#basic-log").html("<b>Font colour(#dcf442):</b> "+iniWordColor);
+			   
+	//	console.log("Resize detected..seting new font scale="+fs+"   s="+s)	
+	//	console.log("Resize detected..seting #words width="+wdWdth)	
+		
+			   return this
+		   };	
+           //----set initial font size based on current document body size	
+           // change the value 0.15 here to change the initial words size
+           // 610 is 610px for the width of div.words; 1536 is the derived constant 		   
+	       wdid.setScaledFont(iniWordSize,610/1536); // initial	wordsize should be around 0.14
+		   
+	       //------Detect user  resize window and scale words font size----	
+		   window.onresize = function () {
+                wdid.setScaledFont(iniWordSize, 610/1536);
+		   }			   
+		   
+		    //---add class menutag-wd
+		    $('#MenuTag').closest('.ui-select').addClass('menutag-wd')
+		
+
+ 		 
+				
+		});//-------(document).ready-----
+	</script>		
+
+	
+</head>
+<body >
+
+
+<div id="statuszone" style="position:relative;z-index:2; ">
+
+	<br/>
+	
+	
+	
+     <!-- Show Left  Right Navigation arrows  -->
+	 <!-- <span class="nxt" style="float:right; margin-left:0px;"><a id="nnxt" href="#"><i class="fa fa-arrow-right" aria-hidden="true" ></i></a></span> -->
+	 <span class="nxt" id="nxt" style="float:right; margin-left:0px;margin-right:1px;"><a id="nnxt" href="#"><img src="images/next-icon.png" alt="Next" title="Next Words" height="14px" width="14px"></a></span>
+	 <span class="modeStatus" id="modeStatus" style="float:right;" ><a id="mmode" href="#">Random play</a></span>
+	 <!-- <span class="bk" style=" float:right; margin-right:0px;"><a id="bbk" href="#" ><i class="fa fa-arrow-left" aria-hidden="true" ></i></a></span>  -->
+     <span class="bk" id="bk" style=" float:right; margin-right:0px;margin-left:0px; padding-right: 0px;"><a id="bbk" href="#" ><img src="images/back-icon.png" alt="Previous" title="Previous Words" height="14px" width="14px"></a></span> 
+	 <!-- Settings button   -->
+	 <span class="s-btn" id="s-btn" style="float:right; margin-left:0px;margin-right:6px;"><a id="ss-btn" href="#"><img src="images/s.png" alt="Settings" title="Settings" height="16px" width="16px"></a></span>
+
+
+ 
+<br/>
+	  <!-- Display selected tag title and its index number -->
+	   <span  style="color:black;" id="tagSelStatus" onclick="pausePlay()" ><i class="fa fa-play" aria-hidden="true"></i>
+ </span> 
+
+
+		   <!-- <img href='images/play-icon.png' height='14px' width='14px'> -->
+ </div>  
+	 
+
+<br/>
+
+
+
+	<!-- Max TWO words.  Words can be seperated by space -->
+	<!-- Do NOT use hypens and underscores -->
+	<!-- NO SPACE at the trailing end -->
+	<!-- To change the select box height, go to menu.css look for #MenuTag-button   -->
+ <form>	
+	<!-- <div data-role="none"  class="ui-field-contain" style="position:relative;z-index:2; float:right; width:15.9em; ! important ;   margin-right:2px;" id="menusTag" > -->
+	<!-- class do NOT use 'ui-field-contain',should be 'ui-contain' else dropbox width becomes BIGGER when phone is in portrait     -->
+	<div data-role="main"  class="ui-content" style="position:relative;z-index:2; float:right; width: 12em;  margin-right:0;" id="menusTag" >
+	      <label for="select-native-1" id="select-native-1"></label>
+	
+		<!-- 
+            autocomplet="off" is required to ensure that when user refresh the browser, the default value is show
+            If not if will remember the last selection and show the last selection as default value			
+		-->
+				
+			<!-- <select  autocomplete="off" id="MenuTag" class="MenuTag" style="width: 12.9em; padding:6px 0;"  onchange="getTag();" >  -->
+			<select   name="select-native-1" autocomplete="off" id="MenuTag" class="MenuTag"  onchange="getTag();" > 
+
+				  <option value="All" selected>All</option>
+				  <option value="Absolute">Absolute</option>
+
+				  <option value="Adam">Adam</option>
+				  <option value="America">America</option>
+				  <option value="Apostles">Apostles</option>				  
+				  <option value="Awakening">Awakening</option>	
+				  
+				  
+				  <option value="Bless">Bless</option>	
+				  <option value="Button">Button</option>
+				  <option value="Calvin">Calvin</option>
+				  <option value="Catholic">Catholic</option>				  
+				  
+
+				  <option value="Cheongpa-dong">Cheongpa-dong</option>
+				  <option value="Cheon_Il_Guk">Cheon Il Guk</option>
+				  <option value="Cheon_Mu_Won">Cheon Mu Won</option>				  
+			  
+			  
+				  <option value="Cheon_Won_Gung">Cheon Won Gung</option>
+				  <option value="Cheonil_Sanctum">Cheonil Sanctum	</option>				  
+				  
+				  
+				  <option value="Chosen">Chosen</option>				  
+			  <option value="Christian">Christian</option>		
+				  <option value="Church">Church</option>
+				  <option value="Communism">Communism</option>					  
+				  <option value="Communicate">Communicate</option>					  
+
+				 <option value="Creation">Creation</option> 
+				 <option value="Daebu_nim">Daebu nim</option> 					 
+				 <option value="Daemo_nim">Daemo nim</option> 				 
+				 
+				 
+				 <option value="Dream">Dream</option> 				 
+				 <option value="Earth">Earth</option> 
+				 <option value="Environment">Environment</option> 				 
+				 <option value="Faith">Faith</option>					 
+				 <option value="Fall">Fall</option>					 
+				 <option value="Family">Family</option>	
+				 <option value="Families">Families</option>					 
+				 <option value="Father">Father</option>	
+				 <option value="Feminine">Feminine</option>	
+				 <option value="Filial">Filial</option>					 
+				 
+ 				 
+				 <option value="Foundation_Day">Foundation Day</option>	
+				 
+				  <option value="God">God</option>
+				  <option value="Golden">Golden</option>
+				  <option value="Gospel">Gospel</option>
+				  <option value="Grandmother">Grandmother</option>
+
+				  
+				  <option value="Han">Han</option>	
+				  
+				  <option value="Han_Hak-ja">Han Hak-ja</option>							  
+				  <option value="Han_Seung-oon">Han Seung-oon</option>	 				  
+				  <option value="Heart">Heart</option>				  
+				  <option value="Heaven">Heaven</option>
+				  <option value="Heavenly_Father">Heavenly Father</option>					  
+				  <option value="Heavenly_Mother">Heavenly Mother</option>				  
+				  <option value="Heavenly_Parent">Heavenly Parent</option>
+				  <option value="Holy_Mother_Han">Holy Mother Han</option>
+				  <option value="Holy_Spirit">Holy Spirit</option>				  
+				  <option value="Hong_Soon-ae">Hong Soon-ae</option>				  
+ 				  
+				  <option value="Israel">Israel</option>	
+				  <option value="Japan">Japan</option>	
+				  
+				  <option value="Jesus">Jesus</option>
+				  <option value="Jo_Won-mo">Jo Won-mo</option>				  
+				  
+				  
+				  <option value="John_the_Baptist">John the Baptist</option>				  
+				  <option value="Joseph">Joseph</option>					  
+				  <option value="Korea">Korea</option>
+				  <option value="Lineage">Lineage</option>				  
+				  
+				  <option value="Love">Love</option>				  
+				  <option value="Marriage">Marriage</option>
+			  
+				  
+				  <option value="Mary">Mary</option>				  
+				  <option value="Martin_Luther">Martin Luther</option>
+
+				  
+				  <option value="Messiah">Messiah</option>				  
+				  <option value="Mind">Mind</option>
+				  <option value="Miracle">Miracle</option>	
+				  <option value="Missionaries">Missionaries</option>
+		  
+			  
+				  <option value="Mother">Mother</option>
+				  <option value="Needle">Needle</option>
+
+				 <option value="Ocean">Ocean</option> 	
+				  <option value="Officiate">Officiate</option>				  
+				  <option value="Only_Begotten">Only Begotten</option>			  
+				  <option value="Peace">Peace</option>   
+				  <option value="Pillar">Pillar</option> 
+				  <option value="Principle">Principle</option>   
+
+				  <option value="Protestant">Protestant</option> 	
+				  <option value="Providence">Providence</option> 
+				  <option value="Puritan">Puritan</option> 				  
+				  <option value="Reformation">Reformation</option> 				  
+				  <option value="Religion">Religion</option> 
+				  <option value="Resonance">Resonance</option> 					  
+				  <option value="Restoration">Restoration</option> 			
+				  <option value="Revelation">Revelation</option> 			
+				  <option value="Satan">Satan</option>  				  
+ 
+				  <option value="Seonghwa">Seonghwa</option> 
+				  <option value="Servant">Servant</option> 				  
+				  <option value="Spirit">Spirit</option> 
+				  <option value="Teaching">Teaching</option>   				  
+				  <option value="Tears">Tears</option>  
+				  <option value="True_Father">True Father</option>  				  
+				  <option value="True_Love">True Love</option>  
+				  <option value="True_Mother">True Mother</option>  				  
+
+				  <option value="True_Parents">True Parents</option>  	
+				  <option value="Tour">Tour</option>  				  
+				  <option value="Truth">Truth</option> 				  
+				  <option value="Unification">Unification</option> 
+			      <option value="Unity">Unity</option>   
+			      <option value="UPF">UPF</option> 				  
+			      <option value="Vision">Vision</option>   				  
+			      <option value="Wedding">Wedding</option> 				  
+			      <option value="Wilderness">Wilderness</option> 
+			      <option value="Wolli">Wolli</option> 				  
+			      <option value="Zechariah">Zechariah</option> 
+
+				  
+			  </select>
+
+	</div>		
+	</form>
+
+<!-- Allow user to click to hide/show  Random/Sequential and words index   -->
+<div id="clickArea" class="clickArea">
+
+ 
+	  <div id="backgnd" class="backgnd" style="">       
+
+ 
+   
+	  </div> 
+	
+
+	    <!-- overflow:hidden here is critical, else you will see a vertical scrollbar when 
+                 window resize or when you view in mobile browser, there will be a vert scrollbar
+		-->
+        <div class="container" style="overflow:hidden">
+            <!-- <canvas id="panel" width="10" height="1"></canvas> -->
+			<!--  To have more line of text, you have to inc the height  -->
+             <canvas id="panel" width="800" height="600"></canvas>
+       </div>
+	   
+</div>   
+	
+
+	
+       <!-- Two divs are to ensure that vertical scrollbar is invisible yet still available  -->	   
+	   <div id="wordsbox" class="wordsbox">
+	     <div class="words" id="words" ></div>
+	   </div>
+	      
+	  
+	   
+	   
+	   <!--================Font color, font size settings=========== -->
+	 <div id="settings" class="draggable" style="visibility: hidden">
+ 	   <div for="basic" style="font-size: large;"><b>Settings</b></div>  
+
+           <!-- close button -->
+          <span style="float:right;"> 
+		    <input id="close-settings" type="button"  data-icon="delete" data-iconpos="notext" style=" " onclick="closeSettings()">
+		  </span>
+
+          <span style="float:left;" id="save-set"> 
+		    <!-- <input data-role="button" id="save-settings" class="custom-btn"  value="Save" data-icon="false"  class="save-settings" > -->
+		    <input type="button" data-mini="true"  class="save-settings"  value="Save" data-icon="false"  class="save-settings" >
+		  </span>	
+
+		  
+	       <br/> 	       <br/>
+         <input type='text'  class='basic'  style="display:inline; "/ >
+		 <span id='basic-log' style="display:inline;"><b>Font colour(#dcf442):</b> </span>	
+		 <br/><br/>
+         <div class="fs">
+		     <label for="font-slider" ><b>Font size(14):</b></label>  
+ 		   <!-- Make sure type="text" data-type="range" are used instead just type="range"
+            else the up/down arrows will be shown on the left of number box -->
+		    <input data-inline="true" style="display:inline;" type="text" data-type="range" name="font-slider" id="font-slider" value="14" min="8" max="40"  />
+          </div>
+		   
+
+		<div  class="set-fnt" >
+		<label for="settings-ffamily" data-inline="true" style=" float:left;"><b>Font family:</b></label>		  
+
+			<!-- <select autocomplete="off" name="settings-ffamily" id="settings-ffamily" data-native-menu="false" data-mini="true" > -->
+			<!-- <select autocomplete="off" name="settings-ffamily" id="settings-ffamily"  data-mini="" > -->
+			 <select  id="settings-ffamily"   > 
+					<option value="Arial" class="Arial" >Arial</option>
+					<option value="Arial Rounded MT Bold,Helvetica Rounded"  >Arial Rounded MT Bold</option>
+					<option value="Avant Garde,Avantgarde,Century Gothic"  >Avant Garde</option>
+					<option value="Bodoni MT,Didot,Didot LT STD,Hoefler Text,Garamond"  >Bodoni MT</option>
+					<option value="Book Antiqua"  >Book Antiqua</option>
+					<option value="Brush Script MT,cursive" >Bush Script MT</option>
+					<option value="Calibri"  >Calibri</option>
+					<option value="Calisto MT"  >Calisto MT</option>
+					<option value="Cambria"  >Cambria</option>
+					<option value="Candara"  >Candara</option>
+					<option value="Comic Sans MS"  >Comic Sans MS</option>
+					<option value="Franklin Gothic Medium,Franklin Gothic,ITC Franklin Gothic,Arial">Franklin Gothic Medium</option>
+					<option value="Garamond"  >Garamond</option>
+					<option value="Georgia"  >Georgia</option>
+					<option value="Gill Sans,Gill Sans MT,Calibri,sans-serif"  >Gill Sans</option>
+					<option value="Goudy Old Style" >Goudy Old Style</option>
+					<option value="Impact,Haettenschweiler,Franklin Gothic Bold,Charcoal,Helvetica Inserat" >Impact</option>
+					<option value="Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana" >Lucida Grande</option>
+					<option value="Lucida Bright,Georgia,serif" >Lucida Bright</option>
+					<option value="Palatino,Palatino Linotype,Palatino LT STD" >Platino</option>
+					<option value="Papyrus,fantasy" >Papyrus</option>
+					<option value="Raleway" selected="selected">Raleway</option>
+					<option value="Rockwell,Courier,Georgia,Times,Times New Roman" >Rockwell</option>
+					<option value="Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica" >Segoe UI</option>
+					<option value="Tahoma,Verdana,Segoe,sans-serif" >Tahoma</option>
+					<option value="TimesNewRoman,Times New Roman,Times,Baskerville,Georgia,serif" >Times News Roman</option>
+					<option value="Verdana,Geneva,sans-serif" >Verdana</option>
+				</select>
+			</div>	
+
+           <span class="words-hor">
+		    <label for="words-slider"><b>Words horizontal position(6):</b></label>
+			<!-- Make sure type="text" data-type="range" are used instead just type="range"
+            		else the up/down arrows will be shown on the left of number box -->
+		    <input  type="text" data-type="range" name="words-slider" id="words-slider" value="6" min="1" max="70"  />
+           </span>
+
+	   </div>
+			
+
+	   <!--  ================ End  settings============ -->
+		
+
+		<script type="text/javascript" >
+
+		var imgRndUpper;// Upper index (inclusive) for bgi
+		var imgRndLower; // Lower index (inclusive) for bgi  
+		var totalvtp=0;
+		var gtWd="";
+		var curSetImg=""; // custom image for specific WORDS
+		var getWdInx=0;
+        var initialPgLoading=true;
+		//--------tag array --------
+		//---For Home_Church, True_Love, True_Parents have underscore as these contain TWO words.. under_scores are used to represent spaces
+		//  Somewhere in the code, underscores will be replaced by spaces
+//		var availableTags=["AllWds","AbsoluteWds","AbelWds","AdamWds",              "AmericaWds","UnificationWds","GodWds",           "HeavenWds","Home_ChurchWds", "JesusWds",         "KoreaWds", "LoveWds", "MindWds", "PeaceWds",           "PrincipleWds", "PrisonWds", "ReligionWds", "SelfishWds",             "SpiritWds","TearsWds","True_LoveWds","True_ParentsWds"];
+//		var totalAvailTag=availableTags.length;
+		
+		var availableSetImg=["AllSetImg","AbsoluteSetImg","AbelSetImg","AdamSetImg","AmericaSetImg","UnificationSetImg","GodSetImg", "HeavenSetImg","Home_ChurchSetImg", "JesusSetImg", "KoreaSetImg", "LoveSetImg", "MindSetImg", "PeaceSetImg","PrincipleSetImg", "PrisonSetImg", "ReligionSetImg", "SelfishSetImg","SpiritSetImg","TearsSetImg","True_LoveSetImg","True_ParentsSetImg"];
+		
+		var curTag="All"
+		var AllWds=[]
+		var AllSetImg=[];
+		
+		//--when a tag is selected from dropdown box, all the WORDS in array AllWds will be searched
+		 //  based on the selected tag.  Those found words are push into array wdInCurTag
+		 //  its Setimg field (in Excel) will be gathered into array setImgInCurTag
+		 //  If the selected tag is All, Array AllWds will copied into array wdInCurTag
+		var wdInCurTag=[]; 
+		var setImgInCurTag=[];
+		
+		
+ //       var	AbsoluteWds=[]; // Tag: Absolute
+		 // variables cannot have hypens , hence underscores are used
+		//---For Home_Church, True_Love, True_Parents have underscore as these contain TWO words.. under_scores are used to represent spaces
+		//  Somewhere in the code, underscores will be replaced by spaces
+//		var AbelWds=[], AdamWds=[],AmericaWds=[], UnificationWds=[],GodWds=[],HeavenWds=[],Home_ChurchWds=[],JesusWds=[];
+//		var KoreaWds=[],LoveWds=[],MindWds=[],PeaceWds=[],PrincipleWds=[],PrisonWds=[],ReligionWds=[],SelfishWds=[],SpiritWds=[];
+//		var TearsWds=[], True_LoveWds=[],True_ParentsWds=[];
+		
+ //       var	AbsoluteSetImg=[];
+//		var AbelSetImg=[], AdamSetImg=[],AmericaSetImg=[], UnificationSetImg=[],GodSetImg=[],HeavenSetImg=[],Home_ChurchSetImg=[],JesusSetImg=[];
+//		var KoreaSetImg=[],LoveSetImg=[],MindSetImg=[],PeaceSetImg=[],PrincipleSetImg=[],PrisonSetImg=[],ReligionSetImg=[],SelfishSetImg=[],SpiritSetImg=[];
+//		var TearsSetImg=[], True_LoveSetImg=[],True_ParentsSetImg=[];
+
+		
+		var renewWorldInt=14000  ;// 12 sec
+		var tag="All"
+	
+//		var curSelTagWds=""; // curSelTagWds maybe  Home_ChurchWds, True_ParentsWds...
+//		var curSelTagSetImg=""; // curSelTagWds maybe  Home_ChurchSetImg, True_ParentsSetImg...
+
+	
+		var resn=0;
+			
+			
+    //----Retrieve settings data from  settings.json---------------			
+	
+		try {
+	       var mySettingsData=	JSON.parse(settingsData);	
+		}
+		catch(err) {
+			alert("Problem getting data from 'settings.json'.  Please ensure that 'settings.json' is in folder 'vtp'. ");
+			window.location.reload();
+			
+		//	throw new Error("Problem getting data from 'settings.json'.  Please ensure that 'settings.json' is in folder 'vtp'. ");
+
+		}
+	
+	
+		mySettingsData.savedSettings.forEach(function(item){
+			//console.log(item.File);
+			//console.log("\n");
+			 //---as the array has a length of ONE, so no need to push to an array
+			 iniWordColor=item.fontcolor;
+			 iniWordSize=item.fontsize;
+			 iniWordFontFamily=item.fontfamily;
+			 iniWordHor=item.wordhor;	
+
+			 
+		});			
+			
+    //---Now if you wish to add or append new background images, just modify 
+    //       Excel file images.xlsx. Remember to add the images to folder 'images'			
+	var bgi={'image':[]};		
+
+    //-------Retreive loaded background image data from  images.json ---	
+
+		try {
+	       var myimgdata=JSON.parse(imgdata);
+		}
+		catch(err) {
+			alert("Problem getting data from 'images.json'.  Please ensure that 'images.json' is in folder 'vtp'. ");
+			throw new Error("Problem getting data from 'images.json'.  Please ensure that 'images.json' is in folder 'vtp'. ");
+
+		}
+	
+		myimgdata.bkimages.forEach(function(item){
+		    var gtImgFile=item.File
+			if (gtImgFile==undefined){
+			   alert("There seem to be uncompleted or empty rows in your 'images.xlsx' file.  Please check your Excel file and convert it to json file and try again. ")
+               throw new Error("There seem to be uncompleted or empty rows in your 'images.xlsx' file.  Please check your Excel file and convert it to json file again.");		
+            }  			   
+			//console.log(gtImgFile);
+			//console.log("\n");
+			bgi.image.push(gtImgFile);
+		});
+				
+		imgRndUpper=bgi.image.length-1;
+//		console.log("Total images="+bgi.image.length);
+		
+		//------get next set of words
+		//--	There is another similar function nnxtWord(text) in menu.js	[no more]
+		//-----Purpose is the count number of spaces to determine how long to wait before refreshing another new word.	
+		//   It also bring out the next Words ---			
+		function nxtWord(text){
+//console.log("selTag="+selTag)
+	
+				 //document.getElementById("words").innerHTML=text;	
+				 //---get the next delay time to fetch next set of words by 
+				  //---counting number of spaces in the current set of words + offset
+				renewWorldInt=text.split(' ').length;
+				//console.log("num of spaces="+renewWorldInt);
+				//renewWorldInt+=4;
+				if (renewWorldInt<20){
+				    renewWorldInt=renewWorldInt * 900; // orignally was 800
+				}else{
+				    renewWorldInt=renewWorldInt * 500;				
+				}
+				
+
+				console.log("Inside nxtWord()   delay time="+renewWorldInt)			  
+						$('#words').fadeOut(1500, function()
+						 {
+							 $('#words').html(text).fadeIn(1500);
+						});	
+
+			$('#words').css({
+				'text-shadow' : '0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px',
+
+			});						
+						
+						
+          //    var stzone=document.getElementById("statuszone");
+		//	      stzone.style.position="relative"
+         //         stzone.style.zIndex="2";			  
+		  
+		 };//-----------end nxtword()--	
+			 
+		 function getCurTagNextWordInx(){
+				if (mode==="Random"){
+					  getWdInx=Math.floor(Math.random() * (curSelTagTotal-1)) + 1 ; 
+					  // console.log("random executed") 
+				   }
+				  else if (mode==="Sequential"){
+						 if (seqIncOrDec==="Inc"){
+					//  console.log("Inside getCurTagNextWordInx()   incremental executed") 
+								  if ((getWdInx+1)<curSelTagTotal)getWdInx++
+									else getWdInx=0
+						 }else{
+						   //  seqIncOrDec="Dec"
+				//				console.log("Decremental executed  curSelTagTotal="+curSelTagTotal) 
+								  if (getWdInx>0)getWdInx--
+									else getWdInx=curSelTagTotal-1;						 
+						 }
+				  }				 
+	   };//-------end  getCurTagNextWordInx()
+	   
+	 
+
+
+       //=======Retreive loaded TF words data from  vtp.json ========	
+		try {
+				 var mydata = JSON.parse(data);
+		}
+		catch(err) {
+			alert("Problem getting data from 'vtp.json'.  Please ensure that 'vtp.json' is in folder 'vtp'. Error= " + err);
+			throw new Error("Problem getting data from 'vtp.json'.  Please ensure that 'vtp.json' is in folder 'vtp'. Error= " + err);
+
+		}	 
+
+ 
+	// alert(mydata[0].id)	 
+	//alert("Ready");
+	// alert(mydata.vtp[0].Words);
+	 
+  mydata.vtp.forEach(function(item){
+		console.log(item.Words);
+		console.log("\n");
+		   gtWd=item.Words;
+		   
+		try {
+	       curSetImg=item.Setimage	
+		}
+		catch(err) {
+			curSetImg=""
+		}		   
+		//---this allows user to leave SetImg col in Excel to be blank.   
+        if (curSetImg ===undefined)curSetImg=""				
+
+			//console.log(val2.Words);
+			AllWds.push(gtWd);
+			AllSetImg.push(curSetImg);
+//if (AllSetImg.length==1)console.log("<<<< all length=1 AllSetImg[0]="+AllSetImg[0])			
+//if (curSetImg !="" && curSetImg !=undefined)console.log("curSetImg="+curSetImg+" inx="+(AllSetImg.length-1))			
+			
+			if (gtWd==undefined){
+			  alert("There seem to be uncompleted or empty rows in your 'vtp.xlsx' file.  Please check your Excel file and convert it to json file and try again. ")
+               throw new Error("There seem to be uncompleted or empty rows in your 'vtp.xlsx' file.  Please check your Excel file and convert it to json file again.");
+			}
+			//---search for tag in the current words, if found push the words to respective tag array--
+			//  NOTE: start from 1 not 0 i.e ignore  AllWds, which already done above.
+//			for (t=1; t<totalAvailTag; t++){
+			   // eg of 'curTagWds' are: AdamWds, ACLCWds, PrisonWds...
+	//			var curTagWds=availableTags[t];// eg AbsoluteWds, GodWds, ... they are array
+//				var curSetImgAry=availableSetImg[t];// eg AbsoluteSetImg, GodSetImg, or...
+			//console.log("curTagWds="+curTagWds)	
+//	console.log("Inside for loop   curSetImgAry="+curSetImgAry)		
+				//----change all to lowercase
+				//curTag=curTag.toLowerCase();
+				 //---replace underscore with spaces
+				 //curTagWds=curTagWds.replace("_", " ");
+				//---remove the last 3 char  i.e  wds
+//				var curTagWdsLen=curTagWds.length;
+				// console.log("Before substr  curTagWds="+curTagWds);
+//				 curTag=curTagWds.substr(0,curTagWdsLen-3);//  eg  Home_ChurchWds becomes Home_Church
+				 //console.log("Before replace underscore  curTag="+curTag);
+
+				 //---replace underscore with spaces
+//				 curTag=curTag.replace("_", " ");												
+	//		 console.log("curTag="+curTag+" curTagWds="+curTagWds);
+				 
+				  // --create array ref using object
+					
+				  //--eg if curTag="Absolute", if found 'Absolute' in current words then
+				   //  console.log("curTagWds="+curTagWds)
+				   //  search() is better than 'indexOf' as can specify case insensitive  i
+				   
+			   
+//				 if (gtWd.search(new RegExp(curTag, "i")) !=-1) {
+					 //---window[] is a built-in  javascript array obj 
+					 //  which allows you to reference an array by a variable which is 'curTagWds'
+//console.log("curTagWds="+curTagWds+"  curSetImgAry="+curSetImgAry)
+		//			 window[curTagWds].push(gtWd); // eg it could be GodWds.push(current words) 
+		//			 window[curSetImgAry].push(curSetImg); // eg it could be GodSetImg.push(current words) 
+//if (curSetImgAry==="TearsSetImg"){console.log("===="+resn+ "  TearsSetImg.length="+TearsSetImg.length+" TearsSetImg[]="+TearsSetImg[TearsSetImg.length-1]+"  At TearsSetImg[0]="+TearsSetImg[0]);resn++;}					 
+					 
+//				 }												 
+				
+//			};//---end for loop
+
+	
+//console.log("?J?J?J   After forloop  TearsSetImg[0]="+TearsSetImg[0]);	
+				
+		
+	});	//---end mydata.vtp.forEach--   
+	
+	     //---duplicate arrays ----
+		 wdInCurTag=AllWds.slice(0); //  
+		 setImgInCurTag=AllSetImg.slice(0);
+
+
+	   
+	   
+	//totalvtp=AllWds.length-1;
+	totalvtp=wdInCurTag.length;
+	//alert("total worlds="+totalvtp)
+	
+	curTagNxtWdNShow();
+
+
+
+   function curTagNxtWdNShow(){
+			//totalvtp=AllWds.length-1;
+			//---when first startup, selTag="All"
+	//		curSelTagWds=selTag+"Wds"; // curSelTagWds maybe  Home_ChurchWds, True_ParentsWds...
+	//		curSelTagSetImg=selTag+"SetImg"; // curSelTagWds maybe  Home_ChurchSetImg, True_ParentsSetImg...
+			
+			//---note window[] is js built-in array which allows you to call an array using variable selTagWds
+			//  
+		//	curSelTagTotal=window[curSelTagWds].length-1; // this is equivalent to  Home_ChurchWds.length
+			//curSelTagTotal=window[curSelTagWds].length; // this is equivalent to  Home_ChurchWds.length
+			curSelTagTotal=wdInCurTag.length; // this is equivalent to  Home_ChurchWds.length
+
+	console.log("Mode="+mode+"  current getWdInx="+getWdInx)	
+			  
+			getCurTagNextWordInx()
+	console.log("------Mode="+mode+"  next getWdInx="+getWdInx)			
+		   //---display current Words index+1/totalSelectTagWords
+		   showInxNTotal(selTag, getWdInx,curSelTagTotal);
+		   
+		   if (initialPgLoading){initialPgLoading=false}
+			 else modeShow();
+
+	//	  curSelTagSetImg=selTag+"SetImg"; 
+		 // curSetImg=window[curSelTagSetImg][getWdInx]
+		  curSetImg=setImgInCurTag[getWdInx]
+
+		  
+		  shwBkgndImg()	;					
+		  //nxtWord(window[curSelTagWds][getWdInx])
+          nxtWord(wdInCurTag[getWdInx]) 
+
+   };//---- curTagNxtWdNShow()  
+					
+	//------------get new set of Words, image and color every  renewWorldInt seconds-----------------
+	var intvRes=0;
+	var readyToGetNxtWd=function(){
+		clearInterval(intvRes);
+		curTagNxtWdNShow();		
+		//------------------set delay time to get the next word----
+		intvRes=setInterval(readyToGetNxtWd,renewWorldInt);
+	};//---end readyToGetNxtWd()---------------
+				
+	intvRes=setInterval(readyToGetNxtWd,renewWorldInt);		   
+	
+	
+//--get next background to display -------	
+function shwBkgndImg(){
+
+		imgRdom=Math.floor(Math.random() * imgRndUpper) + 0 ;  // generate 0 to 9
+
+     // curSetImg=window[curSelTagSetImg][getWdInx]
+      curSetImg=setImgInCurTag[getWdInx]
+	  
+	  
+//console.log(">>>>>>> getWdInx="+getWdInx+"  curSelTagSetImg="+curSelTagSetImg+"  curSetImg="+curSetImg+"  imgRdom="+imgRdom)
+	   //----check number of char in curSetImg
+	   if (curSetImg.length<2 || curSetImg===undefined){					
+			 $('#backgnd').fadeOut(1500,function() {
+//	console.log("random image="+bgi.image[imgRdom])	
+			 $('#backgnd').css({
+		
+					'background-image' : 'url(images/'+bgi.image[imgRdom] + ')'
+				});
+				$('#backgnd').fadeIn(1500);
+			});	
+	  }else{
+			 $('#backgnd').fadeOut(1500,function() {
+//	console.log("Showing curSetImg="+curSetImg+"----")			
+
+			    $('#backgnd').css({
+					'background-image' : 'url(images/'+curSetImg + ')'
+				});
+				$('#backgnd').fadeIn(1500);
+			});
+	  } 
+};//-----shwBkgndImg	
+	
+		
+//-------display     current world inx+1/totalSelectedTag
+function showInxNTotal(selectedTag, curInx,totalSelectedTagWd){
+
+		//---show the selected dropbox Tag and its total beside the Hamburger bar----
+		var selTagNoUnder=selectedTag.replace("_"," ");
+		var curNum;
+		//----convert 0-based index to 1-based number
+		curNum=curInx+1;
+console.log("In showInxNTotal()   curNum="+curNum);		
+		var res1=""
+		if (playStatus==="playing") res1=curNum+"/"+totalSelectedTagWd+" "+selTagNoUnder+" "+"<i class='fa fa-pause' aria-hidden='true'></i>";
+		  else res1=curNum+"/"+totalSelectedTagWd+" "+selTagNoUnder+" "+"<i class='fa fa-play' aria-hidden='true'></i>";
+		
+		//res1=curNum+"/"+totalSelectedTagWd+" "+selTagNoUnder
+		$("#tagSelStatus").html(res1) ; // display default Tag  All 
+		$("#tagSelStatus").css("float","right") ; // display default Tag  All 
+		
+		//var res="";
+	   // if (mode==="Random") res="<a id='mmode' href='#'>"+"R  "+res1+"</a>"
+ 	    //if (mode==="Sequential") res="<a id='mmode' href='#'>"+"S  "+res1+"</a>"
+       //----update status
+ 		// $(".modeStatus").html(res) ;		
+
+}; //----showInxNTotal(selectedTag, curInx,totalSelectedTagWd)		
+		
+		
+	</script>		
+	<script type="text/javascript" src="js/menu.js"></script> 
+		
+</body>
+</html>
