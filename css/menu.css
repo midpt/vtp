@@ -1,0 +1,95 @@
+/* This affect the dropdown box height  */
+#MenuTag-button {
+  padding-top: 3px;
+  padding-bottom: 3px;
+
+ 
+}
+
+/* Font family settings dropdown.  Affect dropdown box height */
+#settings-ffamily-button{
+  padding-top: 3px;
+  padding-bottom: 3px;
+  width:180px; /* Adj before dropdown width */
+}
+
+
+
+/* green next button  */
+.nxt{
+  width: 20px;
+  height:20px;
+  background-color:#FFF0F0;
+
+}
+.bk{
+  width: 20px;
+  height:20px;
+  background-color:#FFF0F0;
+}
+
+/* display Random or Sequential  */
+.modeStatus{
+  width: 140px;
+  height: 20px;
+  background-color:#FFF0F0;
+  text-align: center;
+  font-family: Tahoma;
+  font-size: 14px;
+  font-weight: normal;
+  margin:  auto;
+}
+
+.dropStatus{
+	width:180px;
+	float:right;
+	text-align:center;  
+
+	margin:  0;
+	background-color:#FFF0F0;  /* #4FF050; */
+
+}
+
+/*  For Displaying selected tag and its index number */
+#tagSelStatus{
+	width:180px;	
+	float:right;
+	text-align:center; 	
+    margin-right: 1px;	
+	margin-left: 90%; /* critical originally was 79% */
+	background-color:#FFF0F0;  /* #4FF050; */
+ /* background-color:#FFF0F0; */
+}
+
+
+/* Save setting button */
+#save-set .ui-btn{
+ /* margin-top:0 !important; */
+ top:4px !important; 
+   line-height:10px !important; /* adj text vertical pos */
+  height:8px !important;
+}
+
+
+
+
+
+
+/*   all slider  */
+
+/* slider Words font size slider width  */
+.fs  .ui-slider { width: 200px !important}
+
+/* slider words horizontal position slider width */
+.words-hor .ui-slider{width: 200px !important}
+
+
+/* Settings font family select menu dropbox  */
+.set-fnt .ui-select{
+   width:200px !important;
+   left: 14px !important;
+   line-height:10px !important;
+
+}
+
+
